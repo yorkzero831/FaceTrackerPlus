@@ -12,6 +12,10 @@
 #include <dlib/image_processing.h>
 #include <dlib/image_io.h>
 
+//it will be an per-row buffer offset appear when debug mode
+#ifdef YORKDEBUG
+#define BUFFER_OFF_SET 8
+#endif
 
 @interface DlibWrapper ()
 
@@ -41,90 +45,9 @@
     
     // FIXME: test this stuff for memory leaks (cpp object destruction)
     self.prepared = YES;
-    
-    [self Test];
-}
-
-- (void)Test {
-    UIImage *myImg = [UIImage imageNamed:@"1.jpg"];
-    CGImageRef imageRef = [myImg CGImage];
-    
-    
 }
 
 - (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects {
-    if (!self.prepared) {
-        [self prepare];
-    }
-    
-    dlib::array2d<dlib::bgr_pixel> img;
-    
-    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-    
-    size_t width = CVPixelBufferGetWidth(imageBuffer);
-    size_t height = CVPixelBufferGetHeight(imageBuffer);
-
-    
-    char *baseBuffer = (char *)CVPixelBufferGetBaseAddress(imageBuffer);
-    
-    // set_size expects rows, cols format
-    img.set_size(height, width);
-    
-    // copy samplebuffer image data into dlib image format
-    img.reset();
-    for (size_t y = 0; y < height; y++) {
-        for (size_t x = 0; x < width; x++) {
-            size_t position = (y * width + x) * 4;
-            char b = baseBuffer[position];
-            char g = baseBuffer[position + 1];
-            char r = baseBuffer[position + 2];
-
-            dlib::bgr_pixel newpixel(b, g, r);
-
-            img[y][x] = newpixel;
-        }
-    }
-    
-    CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-    // lets put everything back where it belongs
-    CVPixelBufferLockBaseAddress(imageBuffer, 0);
-    
-//    img.reset();
-//    for (size_t y = 0; y < height; y++) {
-//        for (size_t x = 0; x < width; x++) {
-//            size_t position = (y * width + x) * 4;
-//            baseBuffer[position] = img[y][x].blue;
-//            baseBuffer[position + 1] = img[y][x].green;
-//            baseBuffer[position + 2] = img[y][x].red;
-//        }
-//    }
-    
-    [self drawPoint:baseBuffer :width :height :width :height];
-    
-    [self drawPoint:baseBuffer :width/2 :height/2 :width :height];
-    
-    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-    
-}
-
-- (void)drawPoint: (char *)baseBuffer :(int) x :(int) y :(size_t)width :(size_t)heigth{
-    for (int dx = -1; dx < 2; dx ++){
-        for (int dy = -1; dy < 2; dy ++) {
-            int px = x + dx;
-            int py = y + dy;
-            if(px < 0 || px > width || py < 0 || py > heigth) continue;
-            size_t position = (py * (width-2) + px) * 4;
-            
-            baseBuffer[position] = char(0);
-            baseBuffer[position + 1] = char(1);
-            baseBuffer[position + 2] = char(1);
-        }
-    }
-}
-
-
-- (void)doWorkOnSampleBuffer2:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects {
     
     if (!self.prepared) {
         [self prepare];
@@ -148,6 +71,7 @@
     // copy samplebuffer image data into dlib image format
     img.reset();
     long position = 0;
+    long colCount = 0;
     while (img.move_next()) {
         dlib::bgr_pixel& pixel = img.element();
 
@@ -163,6 +87,13 @@
         pixel = newpixel;
         
         position++;
+#ifdef YORKDEBUG
+        colCount++;
+        if(colCount == width){
+            position += BUFFER_OFF_SET;
+            colCount = 0;
+        }
+#endif
     }
     
     // unlock buffer again until we need it again
@@ -172,24 +103,19 @@
     std::vector<dlib::rectangle> convertedRectangles = [DlibWrapper convertCGRectValueArray:rects];
     
     // for every detected face
-//    for (unsigned long j = 0; j < convertedRectangles.size(); ++j)
-//    {
-//        dlib::rectangle oneFaceRect = convertedRectangles[j];
-//
-//        // detect all landmarks
-//        dlib::full_object_detection shape = sp(img, oneFaceRect);
-//
-//        // and draw them into the image (samplebuffer)
-//        for (unsigned long k = 0; k < shape.num_parts(); k++) {
-//            dlib::point p = shape.part(k);
-//            draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 255));
-//        }
-//    }
-    
-    dlib::point p =  dlib::point(0,0);
-    dlib::point p1 =  dlib::point(width,height);
-    //draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 255));
-    draw_solid_circle(img, p1, 8, dlib::rgb_pixel(0, 255, 255));
+    for (unsigned long j = 0; j < convertedRectangles.size(); ++j)
+    {
+        dlib::rectangle oneFaceRect = convertedRectangles[j];
+
+        // detect all landmarks
+        dlib::full_object_detection shape = sp(img, oneFaceRect);
+
+        // and draw them into the image (samplebuffer)
+        for (unsigned long k = 0; k < shape.num_parts(); k++) {
+            dlib::point p = shape.part(k);
+            draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 255));
+        }
+    }
     
     // lets put everything back where it belongs
     CVPixelBufferLockBaseAddress(imageBuffer, 0);
@@ -209,6 +135,14 @@
         //        char a = baseBuffer[bufferLocation + 3];
         
         position++;
+        
+#ifdef YORKDEBUG
+        colCount++;
+        if(colCount == width){
+            position += BUFFER_OFF_SET ;
+            colCount = 0;
+        }
+#endif
     }
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
 }

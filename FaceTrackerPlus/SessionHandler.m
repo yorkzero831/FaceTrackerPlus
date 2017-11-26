@@ -153,8 +153,6 @@
 }
 
 - (void) captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-//    [connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
-//    [connection setVideoMirrored:true];
     
     if (currentMetaData.count != 0) {
         NSMutableArray *boundsArray = [NSMutableArray array];
@@ -169,11 +167,6 @@
     }
     
     [layer enqueueSampleBuffer:sampleBuffer];
-    NSLog(@"previewlayer: %f, %f, %f, %f", layer.frame.origin.x, layer.frame.origin.y, layer.frame.size.width, layer.frame.size.height);
-//    CGRect rect = layer.bounds;
-//    UIImage *img = [self imageFromSampleBufferRef:sampleBuffer];
-    int i = 0;
-    i++;
 }
 
 - (void) captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
