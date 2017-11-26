@@ -39,7 +39,6 @@
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
                                                                  mediaType:AVMediaTypeVideo
                                                                  position:AVCaptureDevicePositionFront];
-    
     if (device == nil){
         NSLog(@"Failed on getting captureDevice");
         return;
@@ -52,6 +51,10 @@
     
     AVCaptureMetadataOutput *metaOutput = [[AVCaptureMetadataOutput alloc] init];
     [metaOutput setMetadataObjectsDelegate:self queue:faceQueue];
+    
+    AVCaptureConnection *connetion = [output connectionWithMediaType:AVMediaTypeAudio];
+    connetion.videoOrientation = AVCaptureVideoOrientationPortrait;
+    NSLog(@"Orientation :%ld", connetion.videoOrientation);
     
     [session beginConfiguration];
     
@@ -87,13 +90,13 @@
 
 - (UIImage *)imageFromSampleBufferRef:(CMSampleBufferRef)sampleBuffer
 {
-    // イメージバッファの取得
+    // Get Image Buffer
     CVImageBufferRef    buffer;
     buffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-    // イメージバッファのロック
+    // Lock Image Buffer
     CVPixelBufferLockBaseAddress(buffer, 0);
-    // イメージバッファ情報の取得
+    // Get Image Buffer Data
     uint8_t*    base;
     size_t      width, height, bytesPerRow;
     base = CVPixelBufferGetBaseAddress(buffer);
@@ -101,7 +104,7 @@
     height = CVPixelBufferGetHeight(buffer);
     bytesPerRow = CVPixelBufferGetBytesPerRow(buffer);
     
-    // ビットマップコンテキストの作成
+    // Create BitMapContext
     CGColorSpaceRef colorSpace;
     CGContextRef    cgContext;
     colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -110,7 +113,7 @@
                                       kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
     CGColorSpaceRelease(colorSpace);
     
-    // 画像の作成
+    // Create Image
     CGImageRef  cgImage;
     UIImage*    image;
     cgImage = CGBitmapContextCreateImage(cgContext);
@@ -119,7 +122,7 @@
     CGImageRelease(cgImage);
     CGContextRelease(cgContext);
     
-    // イメージバッファのアンロック
+    // Unlock Image Buffer
     CVPixelBufferUnlockBaseAddress(buffer, 0);
     return image;
 }
