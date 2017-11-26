@@ -51,10 +51,7 @@
     
     AVCaptureMetadataOutput *metaOutput = [[AVCaptureMetadataOutput alloc] init];
     [metaOutput setMetadataObjectsDelegate:self queue:faceQueue];
-    
-    AVCaptureConnection *connetion = [output connectionWithMediaType:AVMediaTypeAudio];
-    connetion.videoOrientation = AVCaptureVideoOrientationPortrait;
-    NSLog(@"Orientation :%ld", connetion.videoOrientation);
+
     
     [session beginConfiguration];
     
@@ -67,9 +64,33 @@
     if ([session canAddOutput:metaOutput]) {
         [session addOutput:metaOutput];
     }
+    
+    AVCaptureConnection *videoConnection = [output connectionWithMediaType:AVMediaTypeVideo];
+    [videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+    [videoConnection setVideoMirrored:YES];
+    
+    AVCaptureConnection *metaConnection = [metaOutput connectionWithMediaType:AVMediaTypeMetadata];
+    [metaConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+    [metaConnection setVideoMirrored:YES];
+    
+    
+    
+    
+//    if ([session canAddConnection:connection]) {
+//        [session addConnection:connection];
+//    }
+
+#ifdef YORKDEBUG
+    //Set Medium Resolution When Build With Debug
     if([session canSetSessionPreset:AVCaptureSessionPresetMedium]){
         [session setSessionPreset:AVCaptureSessionPresetMedium];
     }
+#else
+    //Set High Resolution When Build With Release
+    if([session canSetSessionPreset:AVCaptureSessionPreset1280x720]){
+        [session setSessionPreset:AVCaptureSessionPreset1280x720];
+    }
+#endif
     
     [session commitConfiguration];
     
@@ -132,6 +153,7 @@
 }
 
 - (void) captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    
     if (currentMetaData.count != 0) {
         NSMutableArray *boundsArray = [NSMutableArray array];
         for (AVMetadataObject *object in currentMetaData) {
@@ -144,12 +166,7 @@
         }
     }
     
-    
     [layer enqueueSampleBuffer:sampleBuffer];
-//    CGRect rect = layer.bounds;
-//    UIImage *img = [self imageFromSampleBufferRef:sampleBuffer];
-    int i = 0;
-    i++;
 }
 
 - (void) captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(AVCaptureConnection *)connection {

@@ -30,6 +30,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     sessionHandler = [[SessionHandler alloc] init];
     
     [sessionHandler openSession];

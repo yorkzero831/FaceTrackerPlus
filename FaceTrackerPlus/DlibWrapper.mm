@@ -12,6 +12,11 @@
 #include <dlib/image_processing.h>
 #include <dlib/image_io.h>
 
+//it will be an per-row buffer offset appear when debug mode
+#ifdef YORKDEBUG
+#define BUFFER_OFF_SET 8
+#endif
+
 @interface DlibWrapper ()
 
 @property (assign) BOOL prepared;
@@ -56,6 +61,8 @@
 
     size_t width = CVPixelBufferGetWidth(imageBuffer);
     size_t height = CVPixelBufferGetHeight(imageBuffer);
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
+    
     char *baseBuffer = (char *)CVPixelBufferGetBaseAddress(imageBuffer);
     
     // set_size expects rows, cols format
@@ -64,6 +71,7 @@
     // copy samplebuffer image data into dlib image format
     img.reset();
     long position = 0;
+    long colCount = 0;
     while (img.move_next()) {
         dlib::bgr_pixel& pixel = img.element();
 
@@ -79,6 +87,13 @@
         pixel = newpixel;
         
         position++;
+#ifdef YORKDEBUG
+        colCount++;
+        if(colCount == width){
+            position += BUFFER_OFF_SET;
+            colCount = 0;
+        }
+#endif
     }
     
     // unlock buffer again until we need it again
@@ -91,10 +106,10 @@
     for (unsigned long j = 0; j < convertedRectangles.size(); ++j)
     {
         dlib::rectangle oneFaceRect = convertedRectangles[j];
-        
+
         // detect all landmarks
         dlib::full_object_detection shape = sp(img, oneFaceRect);
-        
+
         // and draw them into the image (samplebuffer)
         for (unsigned long k = 0; k < shape.num_parts(); k++) {
             dlib::point p = shape.part(k);
@@ -120,6 +135,14 @@
         //        char a = baseBuffer[bufferLocation + 3];
         
         position++;
+        
+#ifdef YORKDEBUG
+        colCount++;
+        if(colCount == width){
+            position += BUFFER_OFF_SET ;
+            colCount = 0;
+        }
+#endif
     }
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
 }
