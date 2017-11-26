@@ -20,6 +20,8 @@
 		98B582AE1FCA6B6300AC9520 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98B582AD1FCA6B5A00AC9520 /* CoreGraphics.framework */; };
 		98B582B11FCA6E5000AC9520 /* DlibWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98B582B01FCA6E5000AC9520 /* DlibWrapper.mm */; };
 		98B582B31FCA733F00AC9520 /* shape_predictor_68_face_landmarks.dat in Resources */ = {isa = PBXBuildFile; fileRef = 98B582B21FCA733F00AC9520 /* shape_predictor_68_face_landmarks.dat */; };
+		98B582B51FCAD76000AC9520 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 98B582B41FCAD75F00AC9520 /* 1.jpg */; };
+		98B582B71FCADE7F00AC9520 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98B582B61FCADE7600AC9520 /* CoreVideo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		98B582AF1FCA6E5000AC9520 /* DlibWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DlibWrapper.h; sourceTree = "<group>"; };
 		98B582B01FCA6E5000AC9520 /* DlibWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DlibWrapper.mm; sourceTree = "<group>"; };
 		98B582B21FCA733F00AC9520 /* shape_predictor_68_face_landmarks.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = shape_predictor_68_face_landmarks.dat; path = FaceTrackerPlus/lib/shape_predictor_68_face_landmarks.dat; sourceTree = "<group>"; };
+		98B582B41FCAD75F00AC9520 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
+		98B582B61FCADE7600AC9520 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98B582B71FCADE7F00AC9520 /* CoreVideo.framework in Frameworks */,
 				98B582AE1FCA6B6300AC9520 /* CoreGraphics.framework in Frameworks */,
 				98B582A91FCA57C800AC9520 /* libdlib.a in Frameworks */,
 				98B582A71FCA57B700AC9520 /* Accelerate.framework in Frameworks */,
@@ -61,6 +66,7 @@
 		98B582801FCA562200AC9520 = {
 			isa = PBXGroup;
 			children = (
+				98B582B41FCAD75F00AC9520 /* 1.jpg */,
 				98B582B21FCA733F00AC9520 /* shape_predictor_68_face_landmarks.dat */,
 				98B5828B1FCA562200AC9520 /* FaceTrackerPlus */,
 				98B5828A1FCA562200AC9520 /* Products */,
@@ -100,6 +106,7 @@
 		98B582A51FCA57B200AC9520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				98B582B61FCADE7600AC9520 /* CoreVideo.framework */,
 				98B582AD1FCA6B5A00AC9520 /* CoreGraphics.framework */,
 				98B582A81FCA57C800AC9520 /* libdlib.a */,
 				98B582A61FCA57B200AC9520 /* Accelerate.framework */,
@@ -169,6 +176,7 @@
 				98B5829C1FCA562200AC9520 /* LaunchScreen.storyboard in Resources */,
 				98B582991FCA562200AC9520 /* Assets.xcassets in Resources */,
 				98B582941FCA562200AC9520 /* Main.storyboard in Resources */,
+				98B582B51FCAD76000AC9520 /* 1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +335,7 @@
 					NDEBUG,
 					DLIB_USE_BLAS,
 					DLIB_USE_LAPACK,
+					"YORKDEBUG=1",
 				);
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/FaceTrackerPlus/lib";
 				INFOPLIST_FILE = FaceTrackerPlus/Info.plist;
@@ -335,9 +344,11 @@
 					"$(SRCROOT)/FaceTrackerPlus/lib",
 					"$(PROJECT_DIR)/FaceTrackerPlus/lib",
 				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = york.FaceTrackerPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -362,9 +373,11 @@
 					"$(SRCROOT)/FaceTrackerPlus/lib",
 					"$(PROJECT_DIR)/FaceTrackerPlus/lib",
 				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = york.FaceTrackerPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 			};
 			name = Release;
 		};
