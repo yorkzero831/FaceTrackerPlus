@@ -79,6 +79,8 @@
     double D[5] = { -1.5340366244160525e-01, 4.3555857977835135e+00, 6.1251997031285140e-04, 1.1563522640927748e-03, -2.2481907177130477e+01 };
 #endif
     
+    
+    //fill in 3D ref points(world coordinates), model referenced from http://aifi.isr.uc.pt/Downloads/OpenGL/glAnthropometric3DModel.cpp
     object_pts.push_back(cv::Point3d(6.825897, 6.760612, 4.402142));     //#33 left brow left corner
     object_pts.push_back(cv::Point3d(1.330353, 7.122144, 6.903745));     //#29 left brow right corner
     object_pts.push_back(cv::Point3d(-1.330353, 7.122144, 6.903745));    //#34 right brow left corner
@@ -97,6 +99,8 @@
     //fill in cam intrinsics and distortion coefficients
     cam_matrix = cv::Mat(3, 3, CV_64FC1, K);
     dist_coeffs = cv::Mat(5, 1, CV_64FC1, D);
+    std::cout << "cam_matrix = "<< std::endl << " "  << cam_matrix << std::endl << std::endl;
+    std::cout << "dist_coeffs = "<< std::endl << " "  << dist_coeffs << std::endl << std::endl;
     
     reprojectsrc.push_back(cv::Point3d(10.0, 10.0, 10.0));
     reprojectsrc.push_back(cv::Point3d(10.0, 10.0, -10.0));
@@ -264,6 +268,10 @@
             circle(image, cv::Point(shape.part(i).x(), shape.part(i).y()), 2, cv::Scalar(0, 0, 255), -1);
         }
         
+        for (unsigned int i = 0; i < object_pts.size(); ++i) {
+            circle(image, cv::Point(object_pts[i].x, object_pts[i].y), 2, cv::Scalar(0, 0, 255), -1);
+        }
+        
         std::vector<cv::Point2d> image_pts;
         //fill in 2D ref points, annotations follow https://ibug.doc.ic.ac.uk/resources/300-W/
         image_pts.push_back(cv::Point2d(shape.part(17).x(), shape.part(17).y())); //#17 left brow left corner
@@ -294,6 +302,9 @@
         //reproject
         cv::projectPoints(reprojectsrc, rotation_vec, translation_vec, cam_matrix, dist_coeffs, reprojectdst);
         
+        std::cout << "rotation_vec = "<< std::endl << " "  << rotation_vec << std::endl << std::endl;
+        std::cout << "translation_vec = "<< std::endl << " "  << translation_vec << std::endl << std::endl;
+        
         //draw axis
         line(image, reprojectdst[0], reprojectdst[1], cv::Scalar(0, 0, 255));
         line(image, reprojectdst[1], reprojectdst[2], cv::Scalar(0, 0, 255));
@@ -307,6 +318,8 @@
         line(image, reprojectdst[1], reprojectdst[5], cv::Scalar(0, 0, 255));
         line(image, reprojectdst[2], reprojectdst[6], cv::Scalar(0, 0, 255));
         line(image, reprojectdst[3], reprojectdst[7], cv::Scalar(0, 0, 255));
+        
+        
         
         //calc euler angle
         cv::Rodrigues(rotation_vec, rotation_mat);
