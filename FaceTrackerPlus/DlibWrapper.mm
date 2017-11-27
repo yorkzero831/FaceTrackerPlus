@@ -12,6 +12,8 @@
 #include <dlib/image_processing.h>
 #include <dlib/image_io.h>
 
+#include <dlib/opencv.h>
+
 //it will be an per-row buffer offset appear when debug mode
 #ifdef YORKDEBUG
 #define BUFFER_OFF_SET 8
@@ -26,6 +28,9 @@
 @end
 @implementation DlibWrapper {
     dlib::shape_predictor sp;
+    std::vector<cv::Point3d> reprojectsrc;
+    cv::Mat cam_matrix;
+    cv::Mat dist_coeffs;
 }
 
 
@@ -45,9 +50,38 @@
     
     // FIXME: test this stuff for memory leaks (cpp object destruction)
     self.prepared = YES;
+    
+    [self prepareOpenCv];
 }
 
-- (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects {
+- (void)prepareOpenCv {
+    
+#ifdef YORKDEBUG
+    colCount++;
+    if(colCount == width){
+        position += BUFFER_OFF_SET;
+        colCount = 0;
+    }
+#endif
+    
+    double K[9] = { 6.5308391993466671e+002, 0.0, 3.1950000000000000e+002, 0.0, 6.5308391993466671e+002, 2.3950000000000000e+002, 0.0, 0.0, 1.0 };
+    double D[5] = { 7.0834633684407095e-002, 6.9140193737175351e-002, 0.0, 0.0, -1.3073460323689292e+000 };
+    
+    //fill in cam intrinsics and distortion coefficients
+    cam_matrix = cv::Mat(3, 3, CV_64FC1, K);
+    dist_coeffs = cv::Mat(5, 1, CV_64FC1, D);
+    
+    reprojectsrc.push_back(cv::Point3d(10.0, 10.0, 10.0));
+    reprojectsrc.push_back(cv::Point3d(10.0, 10.0, -10.0));
+    reprojectsrc.push_back(cv::Point3d(10.0, -10.0, -10.0));
+    reprojectsrc.push_back(cv::Point3d(10.0, -10.0, 10.0));
+    reprojectsrc.push_back(cv::Point3d(-10.0, 10.0, 10.0));
+    reprojectsrc.push_back(cv::Point3d(-10.0, 10.0, -10.0));
+    reprojectsrc.push_back(cv::Point3d(-10.0, -10.0, -10.0));
+    reprojectsrc.push_back(cv::Point3d(-10.0, -10.0, 10.0));
+}
+
+- (void)doWorkOnSampleBuffer2:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects {
     
     if (!self.prepared) {
         [self prepare];
@@ -126,6 +160,7 @@
     while (img.move_next()) {
         dlib::bgr_pixel& pixel = img.element();
         
+        
         // assuming bgra format here
         long bufferLocation = position * 4; //(row * width + column) * 4;
         baseBuffer[bufferLocation] = pixel.blue;
@@ -160,6 +195,31 @@
         myConvertedRects.push_back(dlibRect);
     }
     return myConvertedRects;
+}
+
+- (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects {
+    
+    if (!self.prepared) {
+        [self prepare];
+    }
+    
+    CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    
+    CVPixelBufferLockBaseAddress( pixelBuffer, 0 );
+    
+    size_t bufferWidth = CVPixelBufferGetWidth(pixelBuffer);
+    size_t bufferHeight = CVPixelBufferGetHeight(pixelBuffer);
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
+    unsigned char *pixel = (unsigned char *)CVPixelBufferGetBaseAddress(pixelBuffer);
+    cv::Mat image = cv::Mat(bufferHeight, bufferWidth, CV_8UC4, pixel, bytesPerRow);
+    
+    //dlib::cv_image<dlib::bgr_pixel> cimg(image);
+    
+    std::vector<dlib::rectangle> convertedRectangles = [DlibWrapper convertCGRectValueArray:rects];
+    
+    cv::putText(image, "Test", cv::Point(50, 40), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0, 0, 0));
+    
+    CVPixelBufferUnlockBaseAddress( pixelBuffer, 0 );
 }
 
 @end

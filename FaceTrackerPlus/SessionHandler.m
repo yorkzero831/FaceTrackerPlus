@@ -44,6 +44,8 @@
         return;
     }
     
+    
+    
     AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
     
     AVCaptureVideoDataOutput *output =[[AVCaptureVideoDataOutput alloc] init];
@@ -74,11 +76,6 @@
     [metaConnection setVideoMirrored:YES];
     
     
-    
-    
-//    if ([session canAddConnection:connection]) {
-//        [session addConnection:connection];
-//    }
 
 #ifdef YORKDEBUG
     //Set Medium Resolution When Build With Debug
@@ -109,44 +106,6 @@
     [session startRunning];
 }
 
-- (UIImage *)imageFromSampleBufferRef:(CMSampleBufferRef)sampleBuffer
-{
-    // Get Image Buffer
-    CVImageBufferRef    buffer;
-    buffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    
-    // Lock Image Buffer
-    CVPixelBufferLockBaseAddress(buffer, 0);
-    // Get Image Buffer Data
-    uint8_t*    base;
-    size_t      width, height, bytesPerRow;
-    base = CVPixelBufferGetBaseAddress(buffer);
-    width = CVPixelBufferGetWidth(buffer);
-    height = CVPixelBufferGetHeight(buffer);
-    bytesPerRow = CVPixelBufferGetBytesPerRow(buffer);
-    
-    // Create BitMapContext
-    CGColorSpaceRef colorSpace;
-    CGContextRef    cgContext;
-    colorSpace = CGColorSpaceCreateDeviceRGB();
-    cgContext = CGBitmapContextCreate(
-                                      base, width, height, 8, bytesPerRow, colorSpace,
-                                      kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
-    CGColorSpaceRelease(colorSpace);
-    
-    // Create Image
-    CGImageRef  cgImage;
-    UIImage*    image;
-    cgImage = CGBitmapContextCreateImage(cgContext);
-    image = [UIImage imageWithCGImage:cgImage scale:1.0f
-                          orientation:UIImageOrientationUp];
-    CGImageRelease(cgImage);
-    CGContextRelease(cgContext);
-    
-    // Unlock Image Buffer
-    CVPixelBufferUnlockBaseAddress(buffer, 0);
-    return image;
-}
 
 - (void) captureOutput:(AVCaptureOutput *)output didDropSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     NSLog(@"DidDropSampleBuffer");
