@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		988837A31FCC38C500298D14 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 988837A21FCC38C500298D14 /* opencv2.framework */; };
 		98B5828E1FCA562200AC9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 98B5828D1FCA562200AC9520 /* AppDelegate.m */; };
 		98B582911FCA562200AC9520 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98B582901FCA562200AC9520 /* ViewController.m */; };
 		98B582941FCA562200AC9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98B582921FCA562200AC9520 /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		988837A21FCC38C500298D14 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = FaceTrackerPlus/lib/opencv2.framework; sourceTree = "<group>"; };
 		98B582891FCA562200AC9520 /* FaceTrackerPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceTrackerPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98B5828C1FCA562200AC9520 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		98B5828D1FCA562200AC9520 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				988837A31FCC38C500298D14 /* opencv2.framework in Frameworks */,
 				98B582B71FCADE7F00AC9520 /* CoreVideo.framework in Frameworks */,
 				98B582AE1FCA6B6300AC9520 /* CoreGraphics.framework in Frameworks */,
 				98B582A91FCA57C800AC9520 /* libdlib.a in Frameworks */,
@@ -106,6 +109,7 @@
 		98B582A51FCA57B200AC9520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				988837A21FCC38C500298D14 /* opencv2.framework */,
 				98B582B61FCADE7600AC9520 /* CoreVideo.framework */,
 				98B582AD1FCA6B5A00AC9520 /* CoreGraphics.framework */,
 				98B582A81FCA57C800AC9520 /* libdlib.a */,
@@ -328,7 +332,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J6V25V92SY;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/FaceTrackerPlus/lib";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/FaceTrackerPlus/lib",
+					"$(PROJECT_DIR)/FaceTrackerPlus/lib",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DLIB_JPEG_SUPPORT,
 					DLIB_NO_GUI_SUPPORT,
@@ -358,7 +365,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J6V25V92SY;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/FaceTrackerPlus/lib";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/FaceTrackerPlus/lib",
+					"$(PROJECT_DIR)/FaceTrackerPlus/lib",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DLIB_JPEG_SUPPORT,
 					DLIB_NO_GUI_SUPPORT,
