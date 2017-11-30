@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435196"
+            timestampString = "533486367.854034"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
@@ -40,7 +40,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435276"
+            timestampString = "533486367.854112"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
@@ -54,7 +54,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435315"
+            timestampString = "533486367.854151"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
@@ -68,7 +68,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.43535"
+            timestampString = "533486367.854187"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
@@ -82,7 +82,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435384"
+            timestampString = "533486367.854223"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
@@ -96,7 +96,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435416"
+            timestampString = "533486367.854257"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "130"
@@ -112,7 +112,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435449"
+            timestampString = "533486367.854291"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "129"
@@ -128,7 +128,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435482"
+            timestampString = "533486367.854325"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
@@ -142,7 +142,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/SessionHandler.m"
-            timestampString = "533477898.435516"
+            timestampString = "533486367.854359"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "82"
@@ -158,11 +158,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.226857"
+            timestampString = "533743448.323383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "-doWorkOnSampleBuffer2:inRects:"
             landmarkType = "7">
          </BreakpointContent>
@@ -174,11 +174,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.227153"
+            timestampString = "533743448.323733"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "-doWorkOnSampleBuffer:inRects:"
             landmarkType = "7">
          </BreakpointContent>
@@ -190,11 +190,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.227368"
+            timestampString = "533743448.323937"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
             landmarkName = "-doWorkOnSampleBuffer:inRects:"
             landmarkType = "7">
          </BreakpointContent>
@@ -202,31 +202,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.227556"
+            timestampString = "533743448.324135"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
-            landmarkName = "-doWorkOnSampleBuffer:inRects:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.227869"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "-prepareOpenCv"
             landmarkType = "7">
          </BreakpointContent>
@@ -238,11 +222,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.228113"
+            timestampString = "533743448.324333"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "256"
-            endingLineNumber = "256"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "-doWorkOnSampleBuffer:inRects:"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,11 +238,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.228288"
+            timestampString = "533743448.324533"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "312"
-            endingLineNumber = "312"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "-doWorkOnSampleBuffer:inRects:"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,16 +250,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FaceTrackerPlus/DlibWrapper.mm"
-            timestampString = "533484963.228462"
+            timestampString = "533743448.324727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "302"
-            endingLineNumber = "302"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
             landmarkName = "-doWorkOnSampleBuffer:inRects:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FaceTrackerPlus/DlibWrapper.mm"
+            timestampString = "533743448.324922"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "-prepareOpenCv"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

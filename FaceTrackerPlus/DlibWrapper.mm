@@ -71,12 +71,18 @@
 
 - (void)prepareOpenCv {
     
+    double height = 0.0;
+    double width = 0.0;
 #ifdef YORKDEBUG
-    double K[9] = { 4.3486177595235137e+02, 0., 2.4043588951243723e+02, 0., 4.3489616629048959e+02, 1.7445540680734098e+02, 0., 0., 1. };
-    double D[5] = { -5.9966891967248651e-02, 1.4974351658287866e+00, 1.6301554829583304e-05, 2.0969593747627289e-03, -4.6666756285231967e+00 };
+    double K[9] = { 4.4438896541316552e+02, 0., 1.8302040876554358e+02, 0., 4.4487809482886513e+02, 2.4090034545907616e+02, 0., 0., 1. };
+    double D[5] = { -1.5191077603745984e-01, 3.6301626740026665e+00, 8.0031819769552895e-04, 1.4423302411267826e-04, -1.6362191503389809e+01 };
+    height = 480;
+    width = 360;
 #else
-    double K[9] = { 1.0207435696821417e+03, 0., 6.5282370756046294e+02, 0., 1.0211188482243954e+03, 3.6321597037804844e+02, 0., 0., 1. };
-    double D[5] = { -1.5340366244160525e-01, 4.3555857977835135e+00, 6.1251997031285140e-04, 1.1563522640927748e-03, -2.2481907177130477e+01 };
+    double K[9] = { 12.8000000000000000e+02, 0., 6.4000000000000000e+02, 0., 12.8000000000000000e+02, 3.6000000000000000e+02, 0., 0., 1. };
+    double D[5] = { -5.5995247272374843e-02, 1.9497813562100241e+00, 6.8687974646744108e-04, -1.5102601349837024e-03, -7.4122846033527345e+00 };
+    height = 1280;
+    width = 720;
 #endif
     
     
@@ -97,19 +103,24 @@
     object_pts.push_back(cv::Point3d(0.000000, -7.415691, 4.070434));    //#6 chin corner
     
     //fill in cam intrinsics and distortion coefficients
-    cam_matrix = cv::Mat(3, 3, CV_64FC1, K);
-    dist_coeffs = cv::Mat(5, 1, CV_64FC1, D);
+//    cam_matrix = cv::Mat(3, 3, CV_64FC1, K);
+//    dist_coeffs = cv::Mat(5, 1, CV_64FC1, D);
+    cv::Point2d center = cv::Point2d(height/2,width/2);
+    cam_matrix = (cv::Mat_<double>(3,3) << height, 0, center.x, 0 , height, center.y, 0, 0, 1);
+    dist_coeffs = cv::Mat::zeros(4,1,cv::DataType<double>::type);
+    
     std::cout << "cam_matrix = "<< std::endl << " "  << cam_matrix << std::endl << std::endl;
     std::cout << "dist_coeffs = "<< std::endl << " "  << dist_coeffs << std::endl << std::endl;
     
-    reprojectsrc.push_back(cv::Point3d(10.0, 10.0, 10.0));
-    reprojectsrc.push_back(cv::Point3d(10.0, 10.0, -10.0));
-    reprojectsrc.push_back(cv::Point3d(10.0, -10.0, -10.0));
-    reprojectsrc.push_back(cv::Point3d(10.0, -10.0, 10.0));
-    reprojectsrc.push_back(cv::Point3d(-10.0, 10.0, 10.0));
-    reprojectsrc.push_back(cv::Point3d(-10.0, 10.0, -10.0));
-    reprojectsrc.push_back(cv::Point3d(-10.0, -10.0, -10.0));
-    reprojectsrc.push_back(cv::Point3d(-10.0, -10.0, 10.0));
+    float time = 0.5;
+    reprojectsrc.push_back(cv::Point3d(10.0, 10.0, 10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(10.0, 10.0, -10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(10.0, -10.0, -10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(10.0, -10.0, 10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(-10.0, 10.0, 10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(-10.0, 10.0, -10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(-10.0, -10.0, -10.0) * time);
+    reprojectsrc.push_back(cv::Point3d(-10.0, -10.0, 10.0) * time);
     
     //reprojected 2D points
     reprojectdst.resize(8);
@@ -289,6 +300,7 @@
         image_pts.push_back(cv::Point2d(shape.part(57).x(), shape.part(57).y())); //#57 mouth central bottom corner
         image_pts.push_back(cv::Point2d(shape.part(8).x(), shape.part(8).y()));   //#8 chin corner
         
+        
         //result
         cv::Mat rotation_vec;                           //3 x 1
         cv::Mat rotation_mat;                           //3 x 3 R
@@ -298,12 +310,12 @@
         
         //calc pos
         cv::solvePnP(object_pts, image_pts, cam_matrix, dist_coeffs, rotation_vec, translation_vec);
+//        std::cout << "rotation_vec = "<< std::endl << " "  << rotation_vec << std::endl << std::endl;
+//        std::cout << "translation_vec = "<< std::endl << " "  << translation_vec << std::endl << std::endl;
         
         //reproject
         cv::projectPoints(reprojectsrc, rotation_vec, translation_vec, cam_matrix, dist_coeffs, reprojectdst);
         
-        std::cout << "rotation_vec = "<< std::endl << " "  << rotation_vec << std::endl << std::endl;
-        std::cout << "translation_vec = "<< std::endl << " "  << translation_vec << std::endl << std::endl;
         
         //draw axis
         line(image, reprojectdst[0], reprojectdst[1], cv::Scalar(0, 0, 255));
@@ -318,7 +330,7 @@
         line(image, reprojectdst[1], reprojectdst[5], cv::Scalar(0, 0, 255));
         line(image, reprojectdst[2], reprojectdst[6], cv::Scalar(0, 0, 255));
         line(image, reprojectdst[3], reprojectdst[7], cv::Scalar(0, 0, 255));
-        
+    
         
         
         //calc euler angle
